@@ -1,17 +1,19 @@
+import { HomePage } from './HomePage/HomePage';
+import { MoviesPage } from './MoviesPage/MoviesPage';
+import { MovieDetail } from './MovieDetailsPage/MovieDetailsPage';
+import { Layout } from './Layout/Layout';
+
+import { Routes, Route } from 'react-router-dom';
 export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        textTransform: 'uppercase',
-        color: '#010101',
-      }}
-    >
-      React homework template
-    </div>
-  );
+	return (
+		<>
+			<Routes>
+				<Route path="/" element={<Layout />}>
+					<Route index element={<HomePage />} />
+					<Route path="movies" element={<MoviesPage />} />
+					<Route path="movies/:movieId" element={<MovieDetail />} />
+				</Route>
+			</Routes>
+		</>
+	);
 };
