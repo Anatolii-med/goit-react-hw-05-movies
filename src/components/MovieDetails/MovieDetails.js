@@ -1,16 +1,73 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Outlet } from 'react-router-dom';
 import { fetchMovieInfo } from '../../Services/fetchAPI';
 
-export function MovieDetail() {
-	const [details, setDetails] = useState('');
+import { LinkN, NavWrap } from '../../components/Nav/Nav.styled';
+
+export function MovieDetailPage() {
+	const [movie, setMovie] = useState('');
 	const { movieId } = useParams();
 
 	useEffect(() => {
-		fetchMovieInfo(movieId).then(setDetails);
+		if (!movieId) {
+			return;
+		}
+		async function fetchMovie() {
+			try {
+				const item = await fetchMovieInfo(movieId);
+				setMovie(item);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		fetchMovie();
 	}, [movieId]);
-	console.log(details);
-	return <div>{details.original_title}</div>;
+
+	if (!movie) {
+		return;
+	}
+
+	return (
+		<div>
+			<img
+				src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+				alt="poster"
+				width="200"
+			/>
+			<h3>{movie.original_title}</h3>
+			<h4>User score</h4>
+			<p>{movie.vote_average}</p>
+			<h4>Overview:</h4>
+			<p>{movie.overview}</p>
+			<h4>Genres</h4>
+			<p>
+				{movie.genres.map(genre => {
+					return genre.name;
+				})}
+			</p>
+			{movie && (
+				<>
+					<NavWrap>
+						<LinkN
+							to={{
+								pathname: `/movies/${movieId}/cast`,
+							}}
+						>
+							Cast
+						</LinkN>
+						<LinkN
+							to={{
+								pathname: `/movies/${movieId}/review`,
+							}}
+						>
+							Review
+						</LinkN>
+					</NavWrap>
+					<Outlet />
+				</>
+			)}
+		</div>
+	);
 }
 
 // {data:

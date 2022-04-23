@@ -5,8 +5,19 @@ import { List, ListItem } from './HomePage.styled';
 
 export function HomePage() {
 	const [movies, setMovies] = useState('');
+	const [loader, setLoader] = useState(false);
 	useEffect(() => {
-		fetchTopMovies().then(setMovies);
+		async function fetchMovies() {
+			setLoader(true);
+			try {
+				await fetchTopMovies().then(setMovies);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setLoader(false);
+			}
+		}
+		fetchMovies();
 	}, []);
 
 	return (
