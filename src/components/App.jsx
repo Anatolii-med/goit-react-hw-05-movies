@@ -5,7 +5,7 @@ import { MovieDetailPage } from './MovieDetails/MovieDetails';
 import { Cast } from './Cast/Cast';
 import { Review } from './Reviews/Reviews';
 import { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 export const App = () => {
 	return (
 		<>
@@ -18,6 +18,7 @@ export const App = () => {
 							<Route path="cast" element={<Cast />} />
 							<Route path="review" element={<Review />} />
 						</Route>
+						<Route path="*" element={<Navigate to="/" />} />
 					</Route>
 				</Routes>
 			</Suspense>

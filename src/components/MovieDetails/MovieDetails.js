@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Outlet } from 'react-router-dom';
+import { useParams, Outlet, useNavigate } from 'react-router-dom';
 import { fetchMovieInfo } from '../../Services/fetchAPI';
 
 import { LinkN, NavWrap } from '../../components/Nav/Nav.styled';
@@ -7,6 +7,7 @@ import { LinkN, NavWrap } from '../../components/Nav/Nav.styled';
 export function MovieDetailPage() {
 	const [movie, setMovie] = useState('');
 	const { movieId } = useParams();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!movieId) {
@@ -28,45 +29,47 @@ export function MovieDetailPage() {
 	}
 
 	return (
-		<div>
-			<img
-				src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-				alt="poster"
-				width="200"
-			/>
-			<h3>{movie.original_title}</h3>
-			<h4>User score</h4>
-			<p>{movie.vote_average}</p>
-			<h4>Overview:</h4>
-			<p>{movie.overview}</p>
-			<h4>Genres</h4>
-			<p>
-				{movie.genres.map(genre => {
-					return genre.name;
-				})}
-			</p>
-			{movie && (
-				<>
-					<NavWrap>
-						<LinkN
-							to={{
-								pathname: `/movies/${movieId}/cast`,
-							}}
-						>
-							Cast
-						</LinkN>
-						<LinkN
-							to={{
-								pathname: `/movies/${movieId}/review`,
-							}}
-						>
-							Review
-						</LinkN>
-					</NavWrap>
-					<Outlet />
-				</>
-			)}
-		</div>
+		<>
+			<button
+				type="button"
+				onClick={() => {
+					navigate(-1);
+				}}
+			>
+				GO BACK
+			</button>
+			<div>
+				<img
+					src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+					alt="poster"
+					width="200"
+				/>
+				<h3>{movie.original_title}</h3>
+				<h4>User score</h4>
+				<p>{movie.vote_average}</p>
+				<h4>Overview:</h4>
+				<p>{movie.overview}</p>
+				<h4>Genres</h4>
+				<p>
+					{movie.genres.map(genre => {
+						return genre.name;
+					})}
+				</p>
+				{movie && (
+					<>
+						<NavWrap>
+							<LinkN to={'cast'} replace={true}>
+								Cast
+							</LinkN>
+							<LinkN to={'review'} replace={true}>
+								Review
+							</LinkN>
+						</NavWrap>
+						<Outlet />
+					</>
+				)}
+			</div>
+		</>
 	);
 }
 

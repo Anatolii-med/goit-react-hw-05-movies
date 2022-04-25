@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react';
 import { MovieFinder } from '../../components/MovieFinder/formFinder';
 import { fetchQueryMovie } from 'Services/fetchAPI';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 export function MoviesPage() {
 	const [queryMovieList, setQueryMovieList] = useState('');
 	const [query, setQuery] = useState('');
+	const [urlQuery, setUrlQuery] = useSearchParams();
+	const currentSerchParam = urlQuery.get('query');
 
 	useEffect(() => {
 		if (!query) {
 			return;
 		}
+
+		setUrlQuery({ query: query });
 
 		async function fetchQ() {
 			try {
@@ -21,7 +25,13 @@ export function MoviesPage() {
 			}
 		}
 		fetchQ();
-	}, [query]);
+	}, [query, setUrlQuery]);
+
+	useEffect(() => {
+		if (currentSerchParam) {
+			setQuery(currentSerchParam);
+		}
+	}, [currentSerchParam]);
 
 	function onFormSubmit(e) {
 		setQuery(e);
@@ -35,7 +45,7 @@ export function MoviesPage() {
 
 			{queryMovieList && (
 				<>
-					<h3>We fount this movies wich contain's your query: "{query}"</h3>
+					<h3>We found this movies wich contain your query: "{query}"</h3>
 
 					<ul>
 						{queryMovieList.map(movie => (
