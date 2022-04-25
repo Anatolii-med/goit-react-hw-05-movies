@@ -32,11 +32,14 @@ export function Cast() {
 						{casts.map(cast => {
 							return (
 								<li key={cast.id}>
-									<img
-										src={`https://image.tmdb.org/t/p/original/${cast.profile_path}`}
-										alt="actor"
-										width="50"
-									/>
+									{cast.profile_path && (
+										<img
+											src={`https://image.tmdb.org/t/p/original/${cast.profile_path}`}
+											alt="actor"
+											width="50"
+										/>
+									)}
+
 									<p>Original name: {cast.original_name}</p>
 									<p>Character: {cast.character}</p>
 									<p>Popularity: {cast.popularity}</p>

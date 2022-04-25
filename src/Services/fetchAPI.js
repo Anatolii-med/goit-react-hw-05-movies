@@ -8,6 +8,12 @@ export async function fetchTopMovies() {
 	);
 	return response.data.results;
 }
+export async function fetchQueryMovie(query) {
+	const response = await axios.get(
+		`${BASE_URL}search/movie?api_key=${API_KEY}&language=en-US&query=${query}&page=1&include_adult=false`
+	);
+	return response.data.results;
+}
 
 export async function fetchMovieInfo(movie_id) {
 	const response = await axios.get(
