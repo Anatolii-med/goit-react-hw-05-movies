@@ -1,8 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams, Outlet, useNavigate } from 'react-router-dom';
 import { fetchMovieInfo } from '../../Services/fetchAPI';
-
+import { Suspense } from 'react';
 import { LinkN, NavWrap } from '../../components/Nav/Nav.styled';
+import {
+	ComponentWrap,
+	ButtonBack,
+	MovieWrap,
+	MoviePoster,
+	MovieTitle,
+	MovieSubTitle,
+	MovieSubDiscr,
+	GenreList,
+	ListItem,
+} from './MovieDetailPage.styled';
 
 export function MovieDetailPage() {
 	const [movie, setMovie] = useState('');
@@ -29,32 +40,35 @@ export function MovieDetailPage() {
 	}
 
 	return (
-		<>
-			<button
+		<ComponentWrap>
+			<ButtonBack
 				type="button"
 				onClick={() => {
 					navigate(-1);
 				}}
 			>
 				GO BACK
-			</button>
+			</ButtonBack>
 			<div>
-				<img
-					src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-					alt="poster"
-					width="200"
-				/>
-				<h3>{movie.original_title}</h3>
-				<h4>User score</h4>
-				<p>{movie.vote_average}</p>
-				<h4>Overview:</h4>
-				<p>{movie.overview}</p>
-				<h4>Genres</h4>
-				<p>
-					{movie.genres.map(genre => {
-						return genre.name;
-					})}
-				</p>
+				<MovieWrap>
+					<MoviePoster
+						src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+						alt="poster"
+					/>
+					<div>
+						<MovieTitle>{movie.original_title}</MovieTitle>
+						<MovieSubTitle>User score</MovieSubTitle>
+						<MovieSubDiscr>{movie.vote_average}</MovieSubDiscr>
+						<MovieSubTitle>Overview:</MovieSubTitle>
+						<MovieSubDiscr>{movie.overview}</MovieSubDiscr>
+						<MovieSubTitle>Genres</MovieSubTitle>
+						<GenreList>
+							{movie.genres.map(genre => {
+								return <ListItem key={genre.id}>{genre.name} </ListItem>;
+							})}
+						</GenreList>
+					</div>
+				</MovieWrap>
 				{movie && (
 					<>
 						<NavWrap>
@@ -65,11 +79,13 @@ export function MovieDetailPage() {
 								Review
 							</LinkN>
 						</NavWrap>
-						<Outlet />
+						<Suspense fallback={<h1>Loading...</h1>}>
+							<Outlet />
+						</Suspense>
 					</>
 				)}
 			</div>
-		</>
+		</ComponentWrap>
 	);
 }
 

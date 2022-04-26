@@ -1,6 +1,12 @@
 import { useState } from 'react';
+import {
+	FormWrap,
+	ButtonSearch,
+	InputSearch,
+	LabelSearch,
+} from './formFinder.styled';
 
-export function MovieFinder({ onSubmit }) {
+export function MovieFinder({ onSubmit, queryItem }) {
 	const [query, setQuery] = useState('');
 
 	function handleInput(e) {
@@ -14,11 +20,18 @@ export function MovieFinder({ onSubmit }) {
 	}
 
 	return (
-		<form onSubmit={onSubmitForm}>
-			<label>
-				<input type="text" onInput={handleInput} value={query} />
-				<button type="submit">Submit</button>
-			</label>
-		</form>
+		<FormWrap>
+			<form onSubmit={onSubmitForm}>
+				<LabelSearch>
+					<InputSearch
+						type="text"
+						placeholder={queryItem}
+						onInput={handleInput}
+						value={query}
+					/>
+					<ButtonSearch type="submit">Submit</ButtonSearch>
+				</LabelSearch>
+			</form>
+		</FormWrap>
 	);
 }

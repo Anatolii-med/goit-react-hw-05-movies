@@ -1,7 +1,17 @@
 import { useEffect, useState } from 'react';
 import { MovieFinder } from '../../components/MovieFinder/formFinder';
 import { fetchQueryMovie } from 'Services/fetchAPI';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+
+import {
+	List,
+	ListItem,
+	LinkItemsWrap,
+	ItemName,
+	ItemQueryTitle,
+	ItemImg,
+	ItemItem,
+} from './MoviesPage.styled';
 
 export function MoviesPage() {
 	const [queryMovieList, setQueryMovieList] = useState('');
@@ -35,34 +45,38 @@ export function MoviesPage() {
 
 	function onFormSubmit(e) {
 		setQuery(e);
-		console.log(query);
-		console.log(queryMovieList);
 	}
 
 	return (
 		<>
-			<MovieFinder onSubmit={onFormSubmit} />
+			<MovieFinder onSubmit={onFormSubmit} queryItem={query} />
 
 			{queryMovieList && (
 				<>
-					<h3>We found this movies wich contain your query: "{query}"</h3>
+					<ItemQueryTitle>
+						We found this movies wich contain your query: "{query}"
+					</ItemQueryTitle>
 
-					<ul>
+					<List>
 						{queryMovieList.map(movie => (
-							<li key={movie.id}>
-								<Link to={`/movies/${movie.id}`}>
-									{movie.poster_path && (
-										<img
-											src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-											alt="poster"
-											width="50"
-										/>
-									)}
-									<p>{movie.original_title ?? movie.original_name}</p>
-								</Link>
-							</li>
+							<ListItem key={movie.id}>
+								<ItemItem to={`/movies/${movie.id}`}>
+									<LinkItemsWrap>
+										{movie.poster_path && (
+											<ItemImg
+												src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+												alt="poster"
+												width="50"
+											/>
+										)}
+										<ItemName>
+											{movie.original_title ?? movie.original_name}
+										</ItemName>
+									</LinkItemsWrap>
+								</ItemItem>
+							</ListItem>
 						))}
-					</ul>
+					</List>
 				</>
 			)}
 		</>

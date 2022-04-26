@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchCast } from 'Services/fetchAPI';
+import { ListItem, List, Propert, ImgAct, PropertValue } from './Cast.styled';
 
 export function Cast() {
 	const { movieId } = useParams();
@@ -14,7 +15,6 @@ export function Cast() {
 			try {
 				const response = await fetchCast(movieId);
 				setCasts(response);
-				console.log(response);
 			} catch (error) {
 				console.log(error);
 			}
@@ -25,28 +25,37 @@ export function Cast() {
 	return (
 		<>
 			{casts.length === 0 ? (
-				<p>nothing</p>
+				<p>We haven't any information about movie</p>
 			) : (
 				<div>
-					<ul>
+					<List>
 						{casts.map(cast => {
 							return (
-								<li key={cast.id}>
+								<ListItem key={cast.id}>
 									{cast.profile_path && (
-										<img
+										<ImgAct
 											src={`https://image.tmdb.org/t/p/original/${cast.profile_path}`}
 											alt="actor"
-											width="50"
+											width="100"
 										/>
 									)}
 
-									<p>Original name: {cast.original_name}</p>
-									<p>Character: {cast.character}</p>
-									<p>Popularity: {cast.popularity}</p>
-								</li>
+									<div>
+										<Propert>
+											Original name:{' '}
+											<PropertValue>{cast.original_name}</PropertValue>{' '}
+										</Propert>
+										<Propert>
+											Character: <PropertValue>{cast.character}</PropertValue>
+										</Propert>
+										<Propert>
+											Popularity: <PropertValue>{cast.popularity}</PropertValue>
+										</Propert>
+									</div>
+								</ListItem>
 							);
 						})}
-					</ul>
+					</List>
 				</div>
 			)}
 		</>
